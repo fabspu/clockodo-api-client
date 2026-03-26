@@ -31,10 +31,16 @@ ENDPOINT_INVENTORY: tuple[EndpointOperation, ...] = (
     EndpointOperation(("entry_groups",), "update", "PUT", "/entrygroups"),
     EndpointOperation(("entry_groups",), "delete", "DELETE", "/entrygroups"),
     EndpointOperation(("lump_sum_services",), "list", "GET", "/lumpsumservices"),
-    EndpointOperation(("lump_sum_services",), "get", "GET", "/lumpsumservices/{resource_id}"),
+    EndpointOperation(
+        ("lump_sum_services",), "get", "GET", "/lumpsumservices/{resource_id}"
+    ),
     EndpointOperation(("lump_sum_services",), "create", "POST", "/lumpsumservices"),
-    EndpointOperation(("lump_sum_services",), "update", "PUT", "/lumpsumservices/{resource_id}"),
-    EndpointOperation(("lump_sum_services",), "delete", "DELETE", "/lumpsumservices/{resource_id}"),
+    EndpointOperation(
+        ("lump_sum_services",), "update", "PUT", "/lumpsumservices/{resource_id}"
+    ),
+    EndpointOperation(
+        ("lump_sum_services",), "delete", "DELETE", "/lumpsumservices/{resource_id}"
+    ),
     EndpointOperation(("projects",), "list", "GET", "/projects"),
     EndpointOperation(("projects",), "get", "GET", "/projects/{resource_id}"),
     EndpointOperation(("projects",), "create", "POST", "/projects"),
@@ -60,18 +66,63 @@ ENDPOINT_INVENTORY: tuple[EndpointOperation, ...] = (
     EndpointOperation(("users",), "create", "POST", "/users"),
     EndpointOperation(("users",), "update", "PUT", "/users/{resource_id}"),
     EndpointOperation(("users",), "delete", "DELETE", "/users/{resource_id}"),
-    EndpointOperation(("users_nonbusiness_groups",), "list", "GET", "/usersNonbusinessGroups"),
-    EndpointOperation(("users_nonbusiness_groups",), "get", "GET", "/usersNonbusinessGroups/{resource_id}"),
-    EndpointOperation(("users_nonbusiness_groups",), "create", "POST", "/usersNonbusinessGroups"),
-    EndpointOperation(("users_nonbusiness_groups",), "update", "PUT", "/usersNonbusinessGroups/{resource_id}"),
-    EndpointOperation(("users_nonbusiness_groups",), "delete", "DELETE", "/usersNonbusinessGroups/{resource_id}"),
-    EndpointOperation(("user_access", "customer_projects"), "get", "GET", "/users/{user_id}/access/customers-projects"),
-    EndpointOperation(("user_access", "services"), "get", "GET", "/users/{user_id}/access/services"),
+    EndpointOperation(
+        ("users_nonbusiness_groups",), "list", "GET", "/usersNonbusinessGroups"
+    ),
+    EndpointOperation(
+        ("users_nonbusiness_groups",),
+        "get",
+        "GET",
+        "/usersNonbusinessGroups/{resource_id}",
+    ),
+    EndpointOperation(
+        ("users_nonbusiness_groups",), "create", "POST", "/usersNonbusinessGroups"
+    ),
+    EndpointOperation(
+        ("users_nonbusiness_groups",),
+        "update",
+        "PUT",
+        "/usersNonbusinessGroups/{resource_id}",
+    ),
+    EndpointOperation(
+        ("users_nonbusiness_groups",),
+        "delete",
+        "DELETE",
+        "/usersNonbusinessGroups/{resource_id}",
+    ),
+    EndpointOperation(
+        ("user_access", "customer_projects"),
+        "get",
+        "GET",
+        "/users/{user_id}/access/customers-projects",
+    ),
+    EndpointOperation(
+        ("user_access", "services"), "get", "GET", "/users/{user_id}/access/services"
+    ),
     EndpointOperation(("aggregates", "users_me"), "get", "GET", "/aggregates/users/me"),
     EndpointOperation(("work_times",), "list", "GET", "/workTimes"),
-    EndpointOperation(("work_times", "change_requests"), "list", "GET", "/workTimes/changeRequests"),
-    EndpointOperation(("work_times", "change_requests"), "create", "POST", "/workTimes/changeRequests"),
-    EndpointOperation(("work_times", "change_requests"), "approve", "POST", "/workTimes/changeRequests/{resource_id}/approve"),
-    EndpointOperation(("work_times", "change_requests"), "decline", "POST", "/workTimes/changeRequests/{resource_id}/decline"),
-    EndpointOperation(("work_times", "change_requests"), "delete", "DELETE", "/workTimes/changeRequests/{resource_id}"),
+    EndpointOperation(
+        ("work_times", "change_requests"), "list", "GET", "/workTimes/changeRequests"
+    ),
+    EndpointOperation(
+        ("work_times", "change_requests"), "create", "POST", "/workTimes/changeRequests"
+    ),
+    EndpointOperation(
+        ("work_times", "change_requests"),
+        "approve",
+        "POST",
+        "/workTimes/changeRequests/{resource_id}/approve",
+    ),
+    EndpointOperation(
+        ("work_times", "change_requests"),
+        "decline",
+        "POST",
+        "/workTimes/changeRequests/{resource_id}/decline",
+    ),
+    EndpointOperation(
+        ("work_times", "change_requests"),
+        "delete",
+        "DELETE",
+        "/workTimes/changeRequests/{resource_id}",
+    ),
 )

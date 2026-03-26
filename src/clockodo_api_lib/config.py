@@ -11,7 +11,9 @@ class ClockodoAuth(BaseModel):
     api_user: str = Field(min_length=1, description="Clockodo user email")
     api_key: str = Field(min_length=1, description="Clockodo API key")
     application_name: str = Field(min_length=1)
-    application_contact: str = Field(min_length=1, description="Technical contact email")
+    application_contact: str = Field(
+        min_length=1, description="Technical contact email"
+    )
 
     @field_validator("api_user", "api_key", "application_name", "application_contact")
     @classmethod

@@ -57,7 +57,9 @@ class CRUDResource(Generic[ModelT]):
         self._model_type = model_type
         self._json_body = json_body
 
-    def list(self, params: BaseModel | Mapping[str, Any] | None = None) -> CollectionResponse[ModelT]:
+    def list(
+        self, params: BaseModel | Mapping[str, Any] | None = None
+    ) -> CollectionResponse[ModelT]:
         payload = self._transport.request("GET", self._path, params=params)
         return self._transport.collection(
             self._model_type,
@@ -78,7 +80,9 @@ class CRUDResource(Generic[ModelT]):
         )
 
     def create(self, request: BaseModel | Mapping[str, Any]) -> ModelT:
-        payload = self._transport.request("POST", self._path, body=request, json_mode=self._json_body)
+        payload = self._transport.request(
+            "POST", self._path, body=request, json_mode=self._json_body
+        )
         return self._transport.model(
             self._model_type,
             self._transport.extract(payload, self._singular_key),
@@ -86,9 +90,13 @@ class CRUDResource(Generic[ModelT]):
             path=self._path,
         )
 
-    def update(self, resource_id: int, request: BaseModel | Mapping[str, Any]) -> ModelT:
+    def update(
+        self, resource_id: int, request: BaseModel | Mapping[str, Any]
+    ) -> ModelT:
         path = f"{self._path}/{resource_id}"
-        payload = self._transport.request("PUT", path, body=request, json_mode=self._json_body)
+        payload = self._transport.request(
+            "PUT", path, body=request, json_mode=self._json_body
+        )
         return self._transport.model(
             self._model_type,
             self._transport.extract(payload, self._singular_key),
@@ -99,7 +107,9 @@ class CRUDResource(Generic[ModelT]):
     def delete(self, resource_id: int) -> SuccessResponse:
         path = f"{self._path}/{resource_id}"
         payload = self._transport.request("DELETE", path)
-        return self._transport.model(SuccessResponse, payload, method="DELETE", path=path)
+        return self._transport.model(
+            SuccessResponse, payload, method="DELETE", path=path
+        )
 
 
 class ClockResource:
@@ -109,17 +119,25 @@ class ClockResource:
 
     def get_running(self) -> ClockRunningResponse:
         payload = self._transport.request("GET", self._path)
-        return self._transport.model(ClockRunningResponse, payload, method="GET", path=self._path)
+        return self._transport.model(
+            ClockRunningResponse, payload, method="GET", path=self._path
+        )
 
-    def start(self, request: ClockStartRequest | Mapping[str, Any]) -> ClockRunningResponse:
+    def start(
+        self, request: ClockStartRequest | Mapping[str, Any]
+    ) -> ClockRunningResponse:
         payload = self._transport.request("POST", self._path, body=request)
-        return self._transport.model(ClockRunningResponse, payload, method="POST", path=self._path)
+        return self._transport.model(
+            ClockRunningResponse, payload, method="POST", path=self._path
+        )
 
     def stop(self, entry_id: int, *, users_id: int | None = None) -> ClockStopResponse:
         path = f"{self._path}/{entry_id}"
         params = {"users_id": users_id} if users_id is not None else None
         payload = self._transport.request("DELETE", path, params=params)
-        return self._transport.model(ClockStopResponse, payload, method="DELETE", path=path)
+        return self._transport.model(
+            ClockStopResponse, payload, method="DELETE", path=path
+        )
 
     def change_duration(
         self,
@@ -128,7 +146,9 @@ class ClockResource:
     ) -> ClockDurationResponse:
         path = f"{self._path}/{entry_id}"
         payload = self._transport.request("PUT", path, body=request)
-        return self._transport.model(ClockDurationResponse, payload, method="PUT", path=path)
+        return self._transport.model(
+            ClockDurationResponse, payload, method="PUT", path=path
+        )
 
 
 class EntryTextsResource:
@@ -138,7 +158,9 @@ class EntryTextsResource:
 
     def list(self, params: BaseModel | Mapping[str, Any]) -> EntryTextSearchResponse:
         payload = self._transport.request("GET", self._path, params=params)
-        return self._transport.model(EntryTextSearchResponse, payload, method="GET", path=self._path)
+        return self._transport.model(
+            EntryTextSearchResponse, payload, method="GET", path=self._path
+        )
 
 
 class EntryGroupsResource:
@@ -146,7 +168,9 @@ class EntryGroupsResource:
         self._transport = transport
         self._path = "/entrygroups"
 
-    def list(self, request: EntryGroupListRequest | Mapping[str, Any]) -> CollectionResponse[EntryGroup]:
+    def list(
+        self, request: EntryGroupListRequest | Mapping[str, Any]
+    ) -> CollectionResponse[EntryGroup]:
         payload = self._transport.request("GET", self._path, params=request)
         return self._transport.collection(
             EntryGroup,
@@ -160,19 +184,31 @@ class EntryGroupsResource:
         self,
         request: BaseModel | Mapping[str, Any],
     ) -> EntryGroupMutationPreview | EntryGroupMutationResult:
-        payload = self._transport.request("PUT", self._path, body=request, json_mode=True)
+        payload = self._transport.request(
+            "PUT", self._path, body=request, json_mode=True
+        )
         if "confirm_key" in payload:
-            return self._transport.model(EntryGroupMutationPreview, payload, method="PUT", path=self._path)
-        return self._transport.model(EntryGroupMutationResult, payload, method="PUT", path=self._path)
+            return self._transport.model(
+                EntryGroupMutationPreview, payload, method="PUT", path=self._path
+            )
+        return self._transport.model(
+            EntryGroupMutationResult, payload, method="PUT", path=self._path
+        )
 
     def delete(
         self,
         request: EntryGroupDeleteRequest | Mapping[str, Any],
     ) -> EntryGroupMutationPreview | EntryGroupMutationResult:
-        payload = self._transport.request("DELETE", self._path, body=request, json_mode=True)
+        payload = self._transport.request(
+            "DELETE", self._path, body=request, json_mode=True
+        )
         if "confirm_key" in payload:
-            return self._transport.model(EntryGroupMutationPreview, payload, method="DELETE", path=self._path)
-        return self._transport.model(EntryGroupMutationResult, payload, method="DELETE", path=self._path)
+            return self._transport.model(
+                EntryGroupMutationPreview, payload, method="DELETE", path=self._path
+            )
+        return self._transport.model(
+            EntryGroupMutationResult, payload, method="DELETE", path=self._path
+        )
 
 
 class CustomerProjectAccessResource:
@@ -182,7 +218,9 @@ class CustomerProjectAccessResource:
     def get(self, user_id: int) -> CustomerProjectAccessResponse:
         path = f"/users/{user_id}/access/customers-projects"
         payload = self._transport.request("GET", path)
-        return self._transport.model(CustomerProjectAccessResponse, payload, method="GET", path=path)
+        return self._transport.model(
+            CustomerProjectAccessResponse, payload, method="GET", path=path
+        )
 
 
 class ServiceAccessResource:
@@ -192,7 +230,9 @@ class ServiceAccessResource:
     def get(self, user_id: int) -> ServiceAccessResponse:
         path = f"/users/{user_id}/access/services"
         payload = self._transport.request("GET", path)
-        return self._transport.model(ServiceAccessResponse, payload, method="GET", path=path)
+        return self._transport.model(
+            ServiceAccessResponse, payload, method="GET", path=path
+        )
 
 
 class UserAccessGroup:
@@ -208,7 +248,9 @@ class AggregatesUsersMeResource:
 
     def get(self) -> UserAggregateResponse:
         payload = self._transport.request("GET", self._path)
-        return self._transport.model(UserAggregateResponse, payload, method="GET", path=self._path)
+        return self._transport.model(
+            UserAggregateResponse, payload, method="GET", path=self._path
+        )
 
 
 class AggregatesGroup:
@@ -221,7 +263,9 @@ class WorkTimeChangeRequestsResource:
         self._transport = transport
         self._path = "/workTimes/changeRequests"
 
-    def list(self, params: BaseModel | Mapping[str, Any] | None = None) -> CollectionResponse[ChangeRequest]:
+    def list(
+        self, params: BaseModel | Mapping[str, Any] | None = None
+    ) -> CollectionResponse[ChangeRequest]:
         payload = self._transport.request("GET", self._path, params=params)
         return self._transport.collection(
             ChangeRequest,
@@ -231,9 +275,15 @@ class WorkTimeChangeRequestsResource:
             path=self._path,
         )
 
-    def create(self, request: BaseModel | Mapping[str, Any]) -> ChangeRequestCreateResponse:
-        payload = self._transport.request("POST", self._path, body=request, json_mode=True)
-        return self._transport.model(ChangeRequestCreateResponse, payload, method="POST", path=self._path)
+    def create(
+        self, request: BaseModel | Mapping[str, Any]
+    ) -> ChangeRequestCreateResponse:
+        payload = self._transport.request(
+            "POST", self._path, body=request, json_mode=True
+        )
+        return self._transport.model(
+            ChangeRequestCreateResponse, payload, method="POST", path=self._path
+        )
 
     def approve(self, resource_id: int) -> ChangeRequest | None:
         path = f"{self._path}/{resource_id}/approve"
@@ -272,7 +322,9 @@ class WorkTimesResource:
         self._path = "/workTimes"
         self.change_requests = WorkTimeChangeRequestsResource(transport)
 
-    def list(self, params: BaseModel | Mapping[str, Any]) -> CollectionResponse[WorkTimeDay]:
+    def list(
+        self, params: BaseModel | Mapping[str, Any]
+    ) -> CollectionResponse[WorkTimeDay]:
         payload = self._transport.request("GET", self._path, params=params)
         return self._transport.collection(
             WorkTimeDay,

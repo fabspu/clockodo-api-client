@@ -6,7 +6,11 @@ import httpx
 import pytest
 import respx
 
-from clockodo_api_lib import ClockodoAPIError, ClockodoClient, ClockodoResponseValidationError
+from clockodo_api_lib import (
+    ClockodoAPIError,
+    ClockodoClient,
+    ClockodoResponseValidationError,
+)
 from clockodo_api_lib.client import _ClockodoClientSurface
 from clockodo_api_lib.inventory import ENDPOINT_INVENTORY
 from clockodo_api_lib.models import (
@@ -57,7 +61,10 @@ def test_endpoint_inventory_methods_are_exposed() -> None:
 
 
 def test_declared_client_surface_matches_default_resource_names() -> None:
-    declared_resource_names = set(_ClockodoClientSurface.__annotations__) - {"config", "transport"}
+    declared_resource_names = set(_ClockodoClientSurface.__annotations__) - {
+        "config",
+        "transport",
+    }
 
     assert declared_resource_names == set(DefaultResources.__annotations__)
 
@@ -70,7 +77,9 @@ def test_client_resource_groups_have_concrete_runtime_types() -> None:
         assert isinstance(client.entry_texts, EntryTextsResource)
         assert isinstance(client.entry_groups, EntryGroupsResource)
         assert isinstance(client.user_access, UserAccessGroup)
-        assert isinstance(client.user_access.customer_projects, CustomerProjectAccessResource)
+        assert isinstance(
+            client.user_access.customer_projects, CustomerProjectAccessResource
+        )
         assert isinstance(client.user_access.services, ServiceAccessResource)
         assert isinstance(client.aggregates, AggregatesGroup)
         assert isinstance(client.work_times, WorkTimesResource)
@@ -83,11 +92,15 @@ def test_client_resource_groups_have_concrete_runtime_types() -> None:
 @respx.mock
 def test_create_customer_sends_form_encoded_request_with_clockodo_headers() -> None:
     route = respx.post("https://api.example.test/api/v2/customers").mock(
-        return_value=httpx.Response(200, json={"customer": {"id": 1, "name": "Acme GmbH"}})
+        return_value=httpx.Response(
+            200, json={"customer": {"id": 1, "name": "Acme GmbH"}}
+        )
     )
 
     with build_client() as client:
-        customer = client.customers.create(CustomerCreateRequest(name="Acme GmbH", number="C-100"))
+        customer = client.customers.create(
+            CustomerCreateRequest(name="Acme GmbH", number="C-100")
+        )
 
     assert customer.id == 1
     request = route.calls.last.request
@@ -96,7 +109,10 @@ def test_create_customer_sends_form_encoded_request_with_clockodo_headers() -> N
     assert parsed_body["number"] == ["C-100"]
     assert request.headers["X-ClockodoApiUser"] == "api-user@example.com"
     assert request.headers["X-ClockodoApiKey"] == "secret-key"
-    assert request.headers["X-Clockodo-External-Application"] == "clockodo-tests;dev@example.com"
+    assert (
+        request.headers["X-Clockodo-External-Application"]
+        == "clockodo-tests;dev@example.com"
+    )
 
 
 @respx.mock

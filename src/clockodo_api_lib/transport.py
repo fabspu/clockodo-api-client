@@ -8,7 +8,11 @@ import httpx
 from pydantic import BaseModel, ValidationError
 
 from .config import ClockodoClientConfig
-from .exceptions import ClockodoAPIError, ClockodoResponseValidationError, ClockodoTransportError
+from .exceptions import (
+    ClockodoAPIError,
+    ClockodoResponseValidationError,
+    ClockodoTransportError,
+)
 from .pagination import CollectionResponse, Paging
 
 T = TypeVar("T", bound=BaseModel)
@@ -18,7 +22,11 @@ def _model_to_dict(value: Any) -> Any:
     if isinstance(value, BaseModel):
         return value.model_dump(by_alias=True, exclude_none=True)
     if isinstance(value, Mapping):
-        return {key: _model_to_dict(nested) for key, nested in value.items() if nested is not None}
+        return {
+            key: _model_to_dict(nested)
+            for key, nested in value.items()
+            if nested is not None
+        }
     if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
         return [_model_to_dict(item) for item in value if item is not None]
     return value
@@ -34,7 +42,9 @@ def _flatten_payload(value: Any, prefix: str | None = None) -> list[tuple[str, A
             child_prefix = f"{prefix}[{key}]" if prefix else str(key)
             items.extend(_flatten_payload(nested, child_prefix))
         return items
-    if isinstance(prepared, Sequence) and not isinstance(prepared, (str, bytes, bytearray)):
+    if isinstance(prepared, Sequence) and not isinstance(
+        prepared, (str, bytes, bytearray)
+    ):
         key = prefix or ""
         if prefix and "[" not in prefix:
             key = f"{prefix}[]"
@@ -45,7 +55,9 @@ def _flatten_payload(value: Any, prefix: str | None = None) -> list[tuple[str, A
 
 
 class ClockodoTransport:
-    def __init__(self, config: ClockodoClientConfig, client: httpx.Client | None = None) -> None:
+    def __init__(
+        self, config: ClockodoClientConfig, client: httpx.Client | None = None
+    ) -> None:
         self.config = config
         self._owns_client = client is None
         self._client = client or httpx.Client(
@@ -78,7 +90,9 @@ class ClockodoTransport:
             if json_mode:
                 request_kwargs["json"] = _model_to_dict(body)
             else:
-                request_kwargs["content"] = urlencode(_flatten_payload(body), doseq=True)
+                request_kwargs["content"] = urlencode(
+                    _flatten_payload(body), doseq=True
+                )
                 request_kwargs["headers"] = {
                     "Content-Type": "application/x-www-form-urlencoded",
                 }
@@ -116,7 +130,9 @@ class ClockodoTransport:
                 errors=exc.errors(),
             ) from exc
 
-    def optional_model(self, model_type: type[T], payload: Any, *, method: str, path: str) -> T | None:
+    def optional_model(
+        self, model_type: type[T], payload: Any, *, method: str, path: str
+    ) -> T | None:
         if payload is None:
             return None
         return self.model(model_type, payload, method=method, path=path)
@@ -141,7 +157,10 @@ class ClockodoTransport:
             raw_sequence = list(raw_items.values())
         else:
             raw_sequence = list(raw_items)
-        items = [self.model(model_type, item, method=method, path=path) for item in raw_sequence]
+        items = [
+            self.model(model_type, item, method=method, path=path)
+            for item in raw_sequence
+        ]
         paging = None
         if "paging" in payload:
             paging = self.model(Paging, payload["paging"], method=method, path=path)
@@ -153,7 +172,9 @@ class ClockodoTransport:
                 return payload[key]
         raise KeyError(f"None of the keys {keys!r} were found in the response payload")
 
-    def _parse_json_payload(self, response: httpx.Response, *, method: str, path: str) -> dict[str, Any]:
+    def _parse_json_payload(
+        self, response: httpx.Response, *, method: str, path: str
+    ) -> dict[str, Any]:
         if not response.content:
             return {}
         try:
