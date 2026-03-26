@@ -1,0 +1,25 @@
+[project]
+name = "clockodo-api-lib"
+version = "0.1.0"
+description = "Python client library for the Clockodo API v2"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "respx>=0.22.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=clockodo_api_lib --cov-report=term-missing"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["uv_build>=0.9.3,<0.10.0"]
+build-backend = "uv_build"
